@@ -14,6 +14,10 @@
 		// svg
 		import { SVGLoader } from './js/SVGLoader.js';
 
+		// vrm 
+		import { GLTFLoader } from './js/GLTFLoader.js';
+		import {VRM, VRMSchema} from './js/three-vrm.js';
+
 		let groupSVG;
 		// svg
 
@@ -57,10 +61,10 @@
 			// SCENE
 			scene = new THREE.Scene();
 			scene.background = new THREE.Color( 0x9F353A);
-			scene.fog = new THREE.Fog( 0xffffff, 250, 1400 );
+			//scene.fog = new THREE.Fog( 0xffffff, 250, 1400 );
 
 			// LIGHTS
-			const dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+			const dirLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 			dirLight.position.set( 0, 0, 1 ).normalize();
 			scene.add( dirLight );
 
@@ -107,6 +111,23 @@
 			// svg
 			loadSVG( 'me.svg' );
 			// svg
+
+			// vrm
+			let mixer;
+			const vrmLoader = new GLTFLoader()
+				vrmLoader.load('./vrm/Naruto_Uzumaki.vrm',
+				(gltf) => {
+				  VRM.from(gltf).then((vrm) => {
+				  	vrm.scene.position.set( 300, 100, -200 );
+				  	vrm.scene.rotation.set( 0, 210, 0 );		
+				  	vrm.scene.scale.set(100,100,100);
+				    scene.add(vrm.scene);
+				   	console.log( vrm );
+				  })
+				}
+			)
+
+ 
 		}
 
 		// svg
@@ -313,6 +334,9 @@
 			camera.lookAt( cameraTarget );
 			renderer.render( scene, camera );
 		}
+
+
+		
 	</script>
 
 </body>
